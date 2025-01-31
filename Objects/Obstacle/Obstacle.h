@@ -8,6 +8,7 @@ typedef struct ObstacleLink {
     int PosX;
     int PosY;
     struct ObstacleLink *next;
+    struct ObstacleLink *prev;
 }OBSTACLE_LINK;
 
 OBSTACLE_LINK* CreateObstacle(OBSTACLE_LINK* obstacle, int X, int Y, int index);

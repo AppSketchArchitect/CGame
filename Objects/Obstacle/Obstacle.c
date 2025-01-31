@@ -10,52 +10,49 @@ OBSTACLE_LINK* CreateObstacle(OBSTACLE_LINK* obstacle, const int X, const int Y,
     new -> PosX = X;
     new -> PosY = Y;
     new -> next = NULL;
+    new -> prev = NULL;
     if(obstacle) {
-        if(index == 0) {
-            new->next = obstacle;
-            obstacle = new;
-        }else {
-            OBSTACLE_LINK* P = obstacle;
-            int x = 0;
-            while(P -> next && x < index - 1) {
-                P = P -> next;
-                x++;
-            }
-            if(P -> next) {
-                new -> next = P -> next;
-            }
-            P -> next = new;
+        int x = 0;
+        OBSTACLE_LINK* P = obstacle;
+        while(P->next && x < index - 1) {
+            P = P->next;
+            x++;
         }
-
+        if(P->next) {
+            P -> next -> prev = new;
+            new -> next = P -> next;
+        }
+        new -> prev = P;
+        P -> next = new;
     }else {
         obstacle = new;
     }
     return obstacle;
 }
 OBSTACLE_LINK* DeleteObstacleAtIndex(OBSTACLE_LINK* obstacle, const int index) {
+
     if(obstacle) {
         if(index == 0) {
             obstacle = RemoveObstacleFromHead(obstacle);
         }else {
             OBSTACLE_LINK* P = obstacle;
-            int x = 1;
-            while (x < index - 1) {
+            int x = 0;
+            while (P -> next && x < index) {
                 P = P -> next;
                 x++;
             }
-            OBSTACLE_LINK* P2 = P -> next;
-            if(P -> next -> next == NULL) {
-                P -> next = NULL;
+            if(P->next) {
+                P -> next -> prev = P -> prev;
+                P -> prev -> next = P -> next;
             }else {
-                P -> next = P -> next -> next;
+                P -> prev -> next = NULL;
             }
-            free(P2);
+            free(P);
         }
     }
     return obstacle;
 }
 OBSTACLE_LINK* RemoveObstacleFromHead(OBSTACLE_LINK *obstacle) {
-    printf("Remove");
     if(obstacle) {
         const int length = ObstacleListLength(obstacle);
         if(length == 1) {
@@ -63,6 +60,7 @@ OBSTACLE_LINK* RemoveObstacleFromHead(OBSTACLE_LINK *obstacle) {
         }else {
             OBSTACLE_LINK* P = obstacle;
             obstacle = obstacle -> next;
+            obstacle -> prev = NULL;
             free(P);
         }
     }
@@ -71,11 +69,13 @@ OBSTACLE_LINK* RemoveObstacleFromHead(OBSTACLE_LINK *obstacle) {
 
 void PrintObstacle(const OBSTACLE_LINK* obstacle) {
     if(obstacle) {
+        int index = 0;
         const OBSTACLE_LINK* current = obstacle;
-        printf("PosX: %d / PosY: %d", current->PosX, current->PosY);
+        printf("\n%d PosX: %d / PosY: %d", index, current->PosX, current->PosY);
         while(current -> next) {
             current = current -> next;
-            printf("PosX: %d / PosY: %d", current->PosX, current->PosY);
+            index++;
+            printf("\n%d PosX: %d / PosY: %d", index, current->PosX, current->PosY);
         }
     }
 }
@@ -135,10 +135,11 @@ OBSTACLE_LINK* DeleteOutObstacle(OBSTACLE_LINK* obstacle) {
             index++;
             current = current->next;
             if(current->PosY < 0) {
-                obstacle = DeleteObstacleAtIndex(obstacle, index + 1);
+                obstacle = DeleteObstacleAtIndex(obstacle, index);
                 return obstacle;
             }
         }
     }
+    PrintObstacle(obstacle);
     return obstacle;
 }
