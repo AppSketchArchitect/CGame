@@ -7,6 +7,7 @@
 
 #endif //READER_H
 
+//Initialisation de la lecture des touches
 void InitializeKeyReader();
 void StopKeyReader();
 char GetInput();

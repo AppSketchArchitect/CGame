@@ -6,10 +6,12 @@
 #include "Utils/Console/Writer/Writer.h"
 
 
-PLAYER* player = NULL;
-OBSTACLE_LINK* obstacles = NULL;
-bool bQuit = false;
+PLAYER* player = NULL; // Déclaration du joueur
+OBSTACLE_LINK* obstacles = NULL;// Déclaration des obstacles
+bool bQuit = false; // Déclaration de la variable de fin de jeu
 
+
+//Initialisation du jeu et des objets
 void Initialize() {
     printf("\nInitialisation...\n");
     InitializeKeyReader();
@@ -20,6 +22,7 @@ void Initialize() {
     obstacles = CreateObstacle(obstacles, 4, 7, 1);
 }
 
+//Mise à jour du jeu en fonction de l'input
 void Update(const char* input) {
     printf("\nUpdating...");
     MovePlayer(player, input);
@@ -34,6 +37,7 @@ void Update(const char* input) {
     }
 }
 
+//Fin du jeu et libération de la mémoire
 void Exit() {
     printf("\nExit...\n");
     StopKeyReader();
@@ -41,10 +45,11 @@ void Exit() {
     FreePlayer(player);
 }
 
+//Fonction principale du jeu
 int main(void) {
 
     Initialize();
-
+    //Boucle principale du jeu
     while(!bQuit) {
         char input = GetInput();
         Update(&input);

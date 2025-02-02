@@ -11,6 +11,7 @@
 bool bQuitInput = false;
 char lastInput = ' ';
 
+//Thread permettant de lire les inputs clavier
 DWORD WINAPI ThreadReader(LPVOID) {
     while (bQuitInput == false) {
         if (GetKeyState(VkKeyScan('b')) & 0x8000) {
@@ -31,15 +32,16 @@ DWORD WINAPI ThreadReader(LPVOID) {
     }
     return 0;
 }
-
+//Initialisation du thread
 void InitializeKeyReader() {
     CreateThread(NULL, 0, ThreadReader, NULL, 0, NULL);
 }
 
+//Arret du thread
 void StopKeyReader() {
     bQuitInput = true;
 }
-
+//Recuperation de l'input
 char GetInput() {
     const char input = lastInput;
     lastInput = ' ';

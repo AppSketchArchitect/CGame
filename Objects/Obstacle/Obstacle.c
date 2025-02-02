@@ -1,10 +1,9 @@
-
 #include "Obstacle.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-//Création d'un obstacle à la fin de la liste
+// Création d'un obstacle à la fin de la liste
 OBSTACLE_LINK* CreateObstacle(OBSTACLE_LINK* obstacle, const int X, const int Y, const int index) {
     OBSTACLE_LINK* new = (OBSTACLE_LINK*)malloc(sizeof(OBSTACLE_LINK));
     new -> PosX = X;
@@ -24,17 +23,18 @@ OBSTACLE_LINK* CreateObstacle(OBSTACLE_LINK* obstacle, const int X, const int Y,
         }
         new -> prev = P;
         P -> next = new;
-    }else {
+    } else {
         obstacle = new;
     }
     return obstacle;
 }
-OBSTACLE_LINK* DeleteObstacleAtIndex(OBSTACLE_LINK* obstacle, const int index) {
 
+// Suppression d'un obstacle à un index donné
+OBSTACLE_LINK* DeleteObstacleAtIndex(OBSTACLE_LINK* obstacle, const int index) {
     if(obstacle) {
         if(index == 0) {
             obstacle = RemoveObstacleFromHead(obstacle);
-        }else {
+        } else {
             OBSTACLE_LINK* P = obstacle;
             int x = 0;
             while (P -> next && x < index) {
@@ -44,7 +44,7 @@ OBSTACLE_LINK* DeleteObstacleAtIndex(OBSTACLE_LINK* obstacle, const int index) {
             if(P->next) {
                 P -> next -> prev = P -> prev;
                 P -> prev -> next = P -> next;
-            }else {
+            } else {
                 P -> prev -> next = NULL;
             }
             free(P);
@@ -52,12 +52,14 @@ OBSTACLE_LINK* DeleteObstacleAtIndex(OBSTACLE_LINK* obstacle, const int index) {
     }
     return obstacle;
 }
+
+// Suppression de l'obstacle en tête de liste
 OBSTACLE_LINK* RemoveObstacleFromHead(OBSTACLE_LINK *obstacle) {
     if(obstacle) {
         const int length = ObstacleListLength(obstacle);
         if(length == 1) {
             obstacle = NULL;
-        }else {
+        } else {
             OBSTACLE_LINK* P = obstacle;
             obstacle = obstacle -> next;
             obstacle -> prev = NULL;
@@ -67,6 +69,7 @@ OBSTACLE_LINK* RemoveObstacleFromHead(OBSTACLE_LINK *obstacle) {
     return obstacle;
 }
 
+// Affichage des obstacles
 void PrintObstacle(const OBSTACLE_LINK* obstacle) {
     if(obstacle) {
         int index = 0;
@@ -79,6 +82,8 @@ void PrintObstacle(const OBSTACLE_LINK* obstacle) {
         }
     }
 }
+
+// Calcul de la longueur de la liste d'obstacles
 int ObstacleListLength(const OBSTACLE_LINK* obstacle) {
     int length = 0;
     if(obstacle) {
@@ -92,6 +97,7 @@ int ObstacleListLength(const OBSTACLE_LINK* obstacle) {
     return length;
 }
 
+// Libération de tous les obstacles
 void FreeAll(OBSTACLE_LINK* obstacle) {
     if(!obstacle) {
         return;
@@ -107,12 +113,14 @@ void FreeAll(OBSTACLE_LINK* obstacle) {
     free(current);
 }
 
+// Génération d'un nouvel obstacle
 OBSTACLE_LINK* SpawnObstacle(OBSTACLE_LINK* obstacle) {
     int x = rand() % 10;
     obstacle = CreateObstacle(obstacle, x, 9, 0);
     return obstacle;
 }
 
+// Déplacement des obstacles
 void MoveObstacle(OBSTACLE_LINK* obstacle) {
     if(obstacle) {
         OBSTACLE_LINK* current = obstacle;
@@ -123,6 +131,8 @@ void MoveObstacle(OBSTACLE_LINK* obstacle) {
         }
     }
 }
+
+// Suppression des obstacles hors de l'écran
 OBSTACLE_LINK* DeleteOutObstacle(OBSTACLE_LINK* obstacle) {
     if(obstacle) {
         int index = 0;

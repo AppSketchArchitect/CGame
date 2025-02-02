@@ -4,12 +4,15 @@
 
 #endif //OBSTACLE_H
 
+// Creation d'une structure pour les obstacles avec les coordonnées X et Y
 typedef struct ObstacleLink {
     int PosX;
     int PosY;
     struct ObstacleLink *next;
     struct ObstacleLink *prev;
 }OBSTACLE_LINK;
+
+// Fonctions avec leurs paramètres 
 
 OBSTACLE_LINK* CreateObstacle(OBSTACLE_LINK* obstacle, int X, int Y, int index);
 OBSTACLE_LINK* DeleteObstacleAtIndex(OBSTACLE_LINK* obstacle, int index);
